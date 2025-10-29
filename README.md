@@ -1,75 +1,52 @@
 # 🎮 Ludoteca
 
-Bem-vindo à Ludoteca — uma coleção moderna e nostálgica de jogos
-clássicos da web, recriados com muito estilo, animações suaves e uma
-pitada de nostalgia retrô.
-Aqui você encontra desde o Jogo da Forca, Letrix (inspirado em Wordle),
-Jogo da Velha, até Tetris, Campo Minado e muito mais.
+Bem-vindo à **Ludoteca** — uma coleção moderna e nostálgica de **jogos clássicos da web**, recriados com muito estilo, animações suaves e uma pitada de nostalgia retrô.  
+Aqui você encontra desde o **Jogo da Forca**, **Letrix (inspirado em Wordle)**, **Jogo da Velha**, até **Tetris**, **Campo Minado** e muito mais.
 
-------------------------------------------------------------------------
+---
 
-🕹️ Visão Geral
+## 🕹️ Visão Geral
 
-A Ludoteca é um projeto em Next.js + TypeScript, projetado para reunir
-diversos mini-jogos clássicos em uma única interface web interativa.
-Cada jogo possui sua própria rota, animações dedicadas e visual
-padronizado com TailwindCSS + shadcn/ui.
+A **Ludoteca** é um projeto em **Next.js + TypeScript**, projetado para reunir diversos mini-jogos clássicos em uma única interface web interativa.  
+Cada jogo possui sua própria rota, animações dedicadas e visual padronizado com **TailwindCSS + shadcn/ui**.
 
-O objetivo é criar uma experiência leve, acessível e divertida — seja
-para relembrar velhos tempos ou competir com amigos em futuras versões
-multiplayer.
+O objetivo é criar uma experiência leve, acessível e divertida — seja para relembrar velhos tempos ou competir com amigos em futuras versões multiplayer.
 
-------------------------------------------------------------------------
+---
 
-✨ Jogos disponíveis
+## ✨ Jogos disponíveis
 
-  -----------------------------------------------------------------------
-  🎯 Nome             🧠 Tipo             📄 Descrição
-  ------------------- ------------------- -------------------------------
-  Jogo da Forca       Palavras            Adivinhe a palavra antes que o
-                                          boneco apareça inteiro!
+| 🎯 Nome | 🧠 Tipo | 📄 Descrição |
+|---------|---------|--------------|
+| **Jogo da Forca** | Palavras | Adivinhe a palavra antes que o boneco apareça inteiro! |
+| **Letrix** | Palavras | Descubra a palavra secreta de 6 letras em até 8 tentativas! |
+| **Jogo da Velha** | Estratégia | Clássico duelo de X e O. Será que você vence o bot? |
+| **Sudoku** | Lógica | Complete a grade numérica sem repetir números. |
+| **Campo Minado** | Lógica | Evite as minas e revele todo o campo. |
+| **Tetris** | Reflexo | Empilhe blocos coloridos e forme linhas completas! |
+| **Memória** | Raciocínio | Encontre todos os pares de cartas no menor tempo possível. |
+| **Snake** | Reflexo | Coma frutas e cresça sem se chocar com o próprio corpo. |
 
-  Letrix              Palavras            Descubra a palavra secreta de 6
-                                          letras em até 8 tentativas!
+> 💡 Novos jogos estão sendo adicionados constantemente.  
+> Se um card aparecer como **"Em breve"**, é porque o jogo está em desenvolvimento.
 
-  Jogo da Velha       Estratégia          Clássico duelo de X e O. Será
-                                          que você vence o bot?
+---
 
-  Sudoku              Lógica              Complete a grade numérica sem
-                                          repetir números.
+## 🧩 Tecnologias utilizadas
 
-  Campo Minado        Lógica              Evite as minas e revele todo o
-                                          campo.
+| Stack | Descrição |
+|-------|------------|
+| **Next.js 16** | Framework React moderno com App Router |
+| **TypeScript** | Tipagem estática e código mais seguro |
+| **TailwindCSS** | Estilização rápida e responsiva |
+| **shadcn/ui** | Biblioteca de componentes acessíveis e elegantes |
+| **Framer Motion** | Animações suaves e interativas |
+| **Lucide Icons** | Ícones leves e bonitos |
+| **Vercel / Localhost** | Hospedagem |
 
-  Tetris              Reflexo             Empilhe blocos coloridos e
-                                          forme linhas completas!
+---
 
-  Memória             Raciocínio          Encontre todos os pares de
-                                          cartas no menor tempo possível.
-
-  -----------------------------------------------------------------------
-
-  💡 Novos jogos estão sendo adicionados constantemente.
-  Se um card aparecer como “Em breve”, é porque o jogo está em
-  desenvolvimento.
-
-------------------------------------------------------------------------
-
-🧩 Tecnologias utilizadas
-
-  Stack                Descrição
-  -------------------- --------------------------------------------------
-  Next.js 16           Framework React moderno com App Router
-  TypeScript           Tipagem estática e código mais seguro
-  TailwindCSS          Estilização rápida e responsiva
-  shadcn/ui            Biblioteca de componentes acessíveis e elegantes
-  Framer Motion        Animações suaves e interativas
-  Lucide Icons         Ícones leves e bonitos
-  Netlify              Hospedagemo
-
-------------------------------------------------------------------------
-
-⚙️ Instalação e uso
+##⚙️ Instalação e uso
 
     # Clone o repositório
     git clone https://github.com/Rodrigoscast/ludoteca.git
@@ -86,9 +63,9 @@ multiplayer.
     # Abra no navegador
     http://localhost:3000
 
-------------------------------------------------------------------------
+---
 
-🧠 Estrutura do projeto
+##🧠 Estrutura do projeto
 
     📂 ludoteca
      ┣ 📂 app
@@ -110,26 +87,26 @@ multiplayer.
      ┣ 📄 tailwind.config.ts
      ┗ 📄 README.md
 
-------------------------------------------------------------------------
+---
 
-🎨 Estilo visual
+##🎨 Estilo visual
 
 -   Tema dark por padrão, com gradientes sutis e blur suave.
 -   Animações de hover, entrada e glitch com Framer Motion.
 -   Cores vivas para cada jogo, mantendo a identidade arcade.
 -   Botões e cards reativos, com efeitos de gradiente animado.
 
-------------------------------------------------------------------------
+---
 
-🧑‍💻 Autor
+##🧑‍💻 Autor
 
 Desenvolvido com 💙 por Rodrigo Castro
 Engenheiro de Software e criador da Ludoteca.
 > Projeto sem fins lucrativos, feito para fins de estudo e nostalgia.
 
-------------------------------------------------------------------------
+---
 
-⚠️ Direitos & créditos
+##⚠️ Direitos & créditos
 
 Alguns jogos da Ludoteca são recriações inspiradas em clássicos, como
 Wordle, Campo Minado, Tetris e Forca.
@@ -138,9 +115,9 @@ pertencem a seus respectivos criadores.
 
   O jogo Letrix é inspirado em Termo e Wordle, sem fins lucrativos.
 
-------------------------------------------------------------------------
+---
 
-🚀 Roadmap futuro
+##🚀 Roadmap futuro
 
 -   🧑‍🤝‍🧑 Modo multiplayer online
 -   💾 Salvamento de progresso local
