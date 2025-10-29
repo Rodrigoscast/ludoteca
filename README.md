@@ -1,4 +1,4 @@
-🎮 Ludoteca
+# 🎮 Ludoteca
 
 Bem-vindo à Ludoteca — uma coleção moderna e nostálgica de jogos
 clássicos da web, recriados com muito estilo, animações suaves e uma
