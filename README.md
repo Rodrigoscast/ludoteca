@@ -24,8 +24,6 @@ O objetivo é criar uma experiência leve, acessível e divertida — seja para 
 | **Sudoku** | Lógica | Complete a grade numérica sem repetir números. |
 | **Campo Minado** | Lógica | Evite as minas e revele todo o campo. |
 | **Tetris** | Reflexo | Empilhe blocos coloridos e forme linhas completas! |
-| **Memória** | Raciocínio | Encontre todos os pares de cartas no menor tempo possível. |
-| **Snake** | Reflexo | Coma frutas e cresça sem se chocar com o próprio corpo. |
 
 > 💡 Novos jogos estão sendo adicionados constantemente.  
 > Se um card aparecer como **"Em breve"**, é porque o jogo está em desenvolvimento.
@@ -42,7 +40,7 @@ O objetivo é criar uma experiência leve, acessível e divertida — seja para 
 | **shadcn/ui** | Biblioteca de componentes acessíveis e elegantes |
 | **Framer Motion** | Animações suaves e interativas |
 | **Lucide Icons** | Ícones leves e bonitos |
-| **Vercel / Localhost** | Hospedagem |
+| **Netlify** | Hospedagem |
 
 ---
 
