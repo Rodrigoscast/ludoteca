@@ -1,36 +1,147 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+🎮 Ludoteca
 
-## Getting Started
+Bem-vindo à Ludoteca — uma coleção moderna e nostálgica de jogos
+clássicos da web, recriados com muito estilo, animações suaves e uma
+pitada de nostalgia retrô.
+Aqui você encontra desde o Jogo da Forca, Letrix (inspirado em Wordle),
+Jogo da Velha, até Tetris, Campo Minado e muito mais.
 
-First, run the development server:
+------------------------------------------------------------------------
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+🕹️ Visão Geral
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+A Ludoteca é um projeto em Next.js + TypeScript, projetado para reunir
+diversos mini-jogos clássicos em uma única interface web interativa.
+Cada jogo possui sua própria rota, animações dedicadas e visual
+padronizado com TailwindCSS + shadcn/ui.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+O objetivo é criar uma experiência leve, acessível e divertida — seja
+para relembrar velhos tempos ou competir com amigos em futuras versões
+multiplayer.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+------------------------------------------------------------------------
 
-## Learn More
+✨ Jogos disponíveis
 
-To learn more about Next.js, take a look at the following resources:
+  -----------------------------------------------------------------------
+  🎯 Nome             🧠 Tipo             📄 Descrição
+  ------------------- ------------------- -------------------------------
+  Jogo da Forca       Palavras            Adivinhe a palavra antes que o
+                                          boneco apareça inteiro!
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+  Letrix              Palavras            Descubra a palavra secreta de 6
+                                          letras em até 8 tentativas!
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+  Jogo da Velha       Estratégia          Clássico duelo de X e O. Será
+                                          que você vence o bot?
 
-## Deploy on Vercel
+  Sudoku              Lógica              Complete a grade numérica sem
+                                          repetir números.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+  Campo Minado        Lógica              Evite as minas e revele todo o
+                                          campo.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+  Tetris              Reflexo             Empilhe blocos coloridos e
+                                          forme linhas completas!
+
+  Memória             Raciocínio          Encontre todos os pares de
+                                          cartas no menor tempo possível.
+
+  -----------------------------------------------------------------------
+
+  💡 Novos jogos estão sendo adicionados constantemente.
+  Se um card aparecer como “Em breve”, é porque o jogo está em
+  desenvolvimento.
+
+------------------------------------------------------------------------
+
+🧩 Tecnologias utilizadas
+
+  Stack                Descrição
+  -------------------- --------------------------------------------------
+  Next.js 16           Framework React moderno com App Router
+  TypeScript           Tipagem estática e código mais seguro
+  TailwindCSS          Estilização rápida e responsiva
+  shadcn/ui            Biblioteca de componentes acessíveis e elegantes
+  Framer Motion        Animações suaves e interativas
+  Lucide Icons         Ícones leves e bonitos
+  Netlify              Hospedagemo
+
+------------------------------------------------------------------------
+
+⚙️ Instalação e uso
+
+    # Clone o repositório
+    git clone https://github.com/Rodrigoscast/ludoteca.git
+
+    # Entre na pasta
+    cd ludoteca
+
+    # Instale as dependências
+    npm install
+
+    # Rode o servidor de desenvolvimento
+    npm run dev
+
+    # Abra no navegador
+    http://localhost:3000
+
+------------------------------------------------------------------------
+
+🧠 Estrutura do projeto
+
+    📂 ludoteca
+     ┣ 📂 app
+     ┃ ┣ 📂 jogos
+     ┃ ┃ ┣ 📂 forca
+     ┃ ┃ ┃ ┗ 📄 page.tsx
+     ┃ ┃ ┣ 📂 letrix
+     ┃ ┃ ┃ ┗ 📄 page.tsx
+     ┃ ┃ ┣ 📂 velha
+     ┃ ┃ ┃ ┗ 📄 page.tsx
+     ┃ ┃ ┗ ...
+     ┃ ┗ 📄 page.tsx          ← Tela inicial com os cards dos jogos
+     ┣ 📂 components
+     ┃ ┣ 📂 ui                ← Componentes shadcn
+     ┃ ┗ 📄 layout.tsx
+     ┣ 📂 public
+     ┃ ┗📂 icons             ← Ícones usados nos jogos
+     ┣ 📄 package.json
+     ┣ 📄 tailwind.config.ts
+     ┗ 📄 README.md
+
+------------------------------------------------------------------------
+
+🎨 Estilo visual
+
+-   Tema dark por padrão, com gradientes sutis e blur suave.
+-   Animações de hover, entrada e glitch com Framer Motion.
+-   Cores vivas para cada jogo, mantendo a identidade arcade.
+-   Botões e cards reativos, com efeitos de gradiente animado.
+
+------------------------------------------------------------------------
+
+🧑‍💻 Autor
+
+Desenvolvido com 💙 por Rodrigo Castro
+Engenheiro de Software e criador da Ludoteca.
+> Projeto sem fins lucrativos, feito para fins de estudo e nostalgia.
+
+------------------------------------------------------------------------
+
+⚠️ Direitos & créditos
+
+Alguns jogos da Ludoteca são recriações inspiradas em clássicos, como
+Wordle, Campo Minado, Tetris e Forca.
+Esses jogos têm regras de domínio público, mas nomes e marcas originais
+pertencem a seus respectivos criadores.
+
+  O jogo Letrix é inspirado em Termo e Wordle, sem fins lucrativos.
+
+------------------------------------------------------------------------
+
+🚀 Roadmap futuro
+
+-   🧑‍🤝‍🧑 Modo multiplayer online
+-   💾 Salvamento de progresso local
+-   🔊 Música e efeitos sonoros Lo-Fi
