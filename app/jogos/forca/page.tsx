@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import { p } from "framer-motion/client";
+import { Slider } from "@/components/ui/slider"
 import {
   Select,
   SelectContent,
@@ -41,6 +42,29 @@ export default function ForcaPage() {
   const [wrongs, setWrongs] = useState(0)
   const [acertos, setAcertos] = useState(0)
   const [tema, setTema] = useState('todos')
+
+  const getColor = (val: number) => {
+    const colors = [
+      "bg-green-500",
+      "bg-lime-500",
+      "bg-yellow-500",
+      "bg-orange-500",
+      "bg-red-500",
+    ]
+    return colors[val - 1]
+  }
+
+  const getNivel = (nivel: number) => {
+    const niveis = [
+      "Muito Fácil",
+      "Fácil",
+      "Médio",
+      "Dificil",
+      "Expert"
+    ]
+
+    return niveis[nivel - 1]
+  }
 
   const masked = useMemo(() => {
     // garante tudo em maiúsculo pra comparação justa
@@ -235,6 +259,28 @@ export default function ForcaPage() {
                 ))}
               </SelectContent>
             </Select>
+            
+            <div className="flex flex-col items-start gap-4 absolute top-20 left-7">
+              <div className="flex items-center gap-3">
+                <div
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-semibold transition-all ${getColor(
+                    nivel
+                  )}`}
+                >
+                  {nivel}
+                </div>
+                <span className="text-muted-foreground text-sm">Nível: {getNivel(nivel)}</span>
+              </div>
+
+              <Slider
+                value={[nivel]}
+                onValueChange={(v) => setNivel(v[0])}
+                min={1}
+                max={5}
+                step={1}
+                className="[&_[role=slider]]:bg-primary [&_[role=slider]]:size-5 w-48"
+              />
+            </div>
 
             <Button
               onClick={resetGame}
@@ -278,7 +324,7 @@ export default function ForcaPage() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={status === "lose"} onOpenChange={() => {}}>
+      <Dialog open={status === "lose"} onOpenChange={() => {resetGame}}>
         <DialogContent className="bg-card border-border text-center py-8">
           <DialogHeader>
             <DialogTitle className="text-3xl font-bold text-rose-400">

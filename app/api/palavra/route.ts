@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
       3. **Não inclua explicações, frases, listas ou definições.**
       4. Responda apenas com a palavra, sem aspas, pontuação ou qualquer outro texto adicional.
       5. Evite repetir palavras já utilizadas anteriormente.
-      6. Sempre responda em português, tanto os conectivos como os nomes, por exemplo Mundungus Fletcher em português é Mundungo Fletcher.
+      6. Sempre responda em português, mas mantenha nomes em inglês traduzindo apenas o conectivo.
       7. Escolha a palavra conforme o nível de dificuldade:
          - Nível 1 → Palavras simples, curtas e muito conhecidas.
          - Nível 2 → Palavras um pouco mais específicas, mas ainda populares.
