@@ -3,53 +3,108 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, RotateCw } from "lucide-react";
+import { ArrowLeft, RotateCw, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
+import { p } from "framer-motion/client";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
-const WORDS = [
-  "ABACATE", "ALGORITMO", "BANANA", "BRASIL", "CACHORRO", "CAMPO",
-  "DADO", "ELEFANTE", "FLAMINGO", "FOGUETE", "GATO", "GIRASSOL",
-  "HACKER", "IGLU", "JOGO", "KARATE", "LIVRO", "MELANCIA", "NINJA",
-  "ORBITA", "PICOLE", "QUEIJO", "ROBOTO", "SOLDADO", "TEXTO",
-  "UNICORNIO", "VALOR", "WEB", "XADREZ", "YOUTUBE", "ZEBRA"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+
+const THEMES = [
+  "Animais", "Animais Marinhos", "Animes", "Ciência", "Cidades do Brasil", "Comidas", "Corpos Celestes",
+  "Esportes", "Fantasia", "Filmes", "Harry Potter", "Heróis e Vilões", "Instrumentos Musicais", 
+  "Jogos", "League of Legends", "Linguagens de Programação", "Livros", "Mangás", "Mitologia", "Moda", "Música", "Natureza",
+  "Objetos", "Países", "Partes do Corpo", "Percy Jackson", "Personagens Históricos", "Profissões", "Sentimentos",
+  "Senhor dos Anéis", "Séries", "Star Wars", "Tecnologia", "Espaço Sideral"
 ];
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
-const MAX_ERRORS = 6; // cabeça, tronco, braço E, braço D, perna E, perna D
+const MAX_ERRORS = 6;
 
 export default function ForcaPage() {
   const router = useRouter();
-  const [secret, setSecret] = useState<string>(() => pickWord());
-  const [guesses, setGuesses] = useState<Set<string>>(new Set());
+  const [secret, setSecret] = useState('');
+  const [nivel, setNivel] = useState(1);
+  const [dica, setDica] = useState('')
+  const [guesses, setGuesses] = useState<string[]>([]);
   const [status, setStatus] = useState<"playing" | "win" | "lose">("playing");
+  const [wrongs, setWrongs] = useState(0)
+  const [acertos, setAcertos] = useState(0)
+  const [tema, setTema] = useState('todos')
 
-  const normalized = useMemo(() => secret.toUpperCase(), [secret]);
-  const wrongs = useMemo(
-    () => Array.from(guesses).filter((g) => !normalized.includes(g)).length,
-    [guesses, normalized]
-  );
+  const masked = useMemo(() => {
+    // garante tudo em maiúsculo pra comparação justa
+    const normalizedSecret = secret.toUpperCase();
 
-  const masked = useMemo(
-    () =>
-      normalized
-        .split("")
-        .map((ch) => (ch === " " ? " " : guesses.has(ch) ? ch : " _ "))
-        .join(""),
-    [normalized, guesses]
-  );
+    return normalizedSecret
+      .split("")
+      .map((ch) => {
+        if (ch === " ") return "-"; // mantém espaços
+        return guesses.includes(ch) ? ch : "_";
+      })
+      .join(" "); // adiciona espaço entre os traços só pra visual
+  }, [secret, guesses]);
+
+  const pickWord = async() => {
+    let temaEscolhido
+
+    if(tema == 'todos'){
+      temaEscolhido = THEMES[Math.floor(Math.random() * THEMES.length)];
+    } else {
+      temaEscolhido = tema
+    }
+    
+    if (!temaEscolhido.trim() || !nivel) return;
+
+    setDica(temaEscolhido)
+    
+    try {
+        const res = await fetch("/api/palavra", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ tema: temaEscolhido, nivel }),
+        });
+
+        const data = await res.json();
+        let resposta = data.resposta || "Desculpe, algo deu errado 😅";
+
+        resposta = resposta
+          .normalize("NFD")               // separa acentos das letras
+          .replace(/[\u0300-\u036f]/g, "") // remove os acentos
+          .replace(/ç/g, "c")             // substitui cedilha
+          .replace(/Ç/g, "C")
+          .replace(/[^a-zA-Z-\s]/g, "")   // remove caracteres que não são letras, espaço ou hífen
+          .trim();
+
+        setSecret(resposta);
+
+    } catch (err) {
+        toast.error("Erro ao carregar palavra, tente novamente mais tarde.")
+    }
+  }
+
+  useEffect(() => {
+    pickWord()
+  }, [])
 
   useEffect(() => {
     if (status !== "playing") return;
-    // Vitória
-    const allRevealed = normalized
-      .split("")
-      .every((ch) => ch === " " || guesses.has(ch));
-    if (allRevealed) setStatus("win");
-    // Derrota
-    if (wrongs >= MAX_ERRORS) setStatus("lose");
-  }, [guesses, normalized, wrongs, status]);
+
+    if (acertos === secret.replace(/\s/g, "").length && secret.replace(/\s/g, "").length > 0) setStatus("win");
+
+    if (wrongs >= MAX_ERRORS) setStatus("lose")
+
+  }, [guesses, wrongs, status, acertos]);
 
   // Teclado físico
   useEffect(() => {
@@ -62,23 +117,52 @@ export default function ForcaPage() {
     return () => window.removeEventListener("keydown", onKey);
   }, [status]);
 
-  function handleGuess(letter: string) {
-    if (guesses.has(letter) || status !== "playing") return;
-    const next = new Set(guesses);
-    next.add(letter);
-    setGuesses(next);
-  }
+  const handleGuess = (letter: string) => {
+    if (status !== "playing") return;
+    if (guesses.find((x) => x == letter)) return;
+
+    // cria novo array, não muta o antigo
+    setGuesses((prev) => {
+      if (prev.find((x) => x == letter)) return prev;
+      return [...prev, letter];
+    });
+  };
+
 
   function resetGame() {
-    setSecret(pickWord());
-    setGuesses(new Set());
+    setWrongs(0)
+    setAcertos(0)
+    pickWord()
+    setGuesses([]);
     setStatus("playing");
   }
+
+  useEffect(() => {
+    resetGame()
+  }, [tema])
+
+  useEffect(() => {
+    let erros = 0;
+    let correct = 0;
+
+    guesses.forEach((x) => {
+      if (!secret.toUpperCase().includes(x)) {
+        erros++;
+      } else {
+        const letras = secret.toUpperCase().split(x).length - 1;
+        correct += letras
+      }
+    });
+
+    setWrongs(erros);
+    setAcertos(correct);
+  }, [guesses, secret]);
 
   const partsToShow = Math.min(wrongs, MAX_ERRORS);
 
   return (
     <main className="min-h-screen px-6 py-8 flex flex-col items-center">
+      <ToastContainer position="top-right" autoClose={3000} />
       {/* Top bar */}
       <div className="w-full max-w-5xl flex items-center justify-between mb-6">
         <Button
@@ -111,100 +195,116 @@ export default function ForcaPage() {
         <div className="w-20" />
       </motion.h1>
 
-      <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="w-full gap-8 flex justify-center">
         {/* Forca (SVG) */}
-        <Card className="bg-card/80 border-border backdrop-blur-md">
-          <CardContent className="p-6">
-            <div className="w-full flex justify-center">
-              <HangmanDrawing show={partsToShow} />
-            </div>
-
-            <div className="mt-6 text-center">
-              <p className="tracking-widest text-2xl font-mono">
-                {masked}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Teclado & Ações */}
-        <Card className="bg-card/80 border-border backdrop-blur-md">
-          <CardContent className="p-6 flex flex-col gap-6">
-            <div className="grid grid-cols-12 gap-2">
-              {ALPHABET.map((l) => {
-                const tried = guesses.has(l);
-                const isWrong = tried && !normalized.includes(l);
-                return (
-                  <button
-                    key={l}
-                    onClick={() => handleGuess(l)}
-                    disabled={tried || status !== "playing"}
-                    className={[
-                      "col-span-2 md:col-span-1 h-10 rounded-md text-sm font-semibold transition",
-                      tried
-                        ? isWrong
-                          ? "bg-rose-500/30 text-rose-200 border border-rose-500/40"
-                          : "bg-emerald-500/30 text-emerald-200 border border-emerald-500/40"
-                        : "bg-slate-700/60 hover:bg-slate-600/70 border border-slate-600",
-                      status !== "playing" ? "opacity-50 cursor-not-allowed" : ""
-                    ].join(" ")}
-                  >
-                    {l}
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="text-sm text-muted-foreground">
-                Dica: palavra com {normalized.length} letras
-                {normalized.includes(" ") ? " (tem espaço)" : ""}.
+        <Card className="bg-card/80 border-border backdrop-blur-md w-8/10">
+          <CardContent className="p-6 relative">
+            <div>
+              <div className="w-full flex justify-center gap-2 text-green-700 mt-5 text-2xl">
+                <strong>Dica:</strong>{dica}
               </div>
-              <Button
-                onClick={resetGame}
-                className="bg-cyan-500 hover:bg-cyan-600"
-              >
-                <RotateCw className="w-4 h-4 mr-2" />
-                Reiniciar
-              </Button>
+              <div className="w-full flex justify-center">
+                <HangmanDrawing show={partsToShow} />
+              </div>
+              <div className="mt-6 text-center">
+                <p className="tracking-widest text-2xl font-mono">
+                  {masked}
+                </p>
+              </div>
+              <div className="w-full flex justify-center gap-2 text-red-400 mt-5">
+                {guesses.map((x) => {
+                  if(secret.toUpperCase().includes(x)) return;
+                  return(
+                    <p key={x}>{x}</p>
+                  )
+                })}
+              </div>              
             </div>
 
-            {/* Status */}
-            <AnimatePresence>
-              {status !== "playing" && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  className="rounded-lg border border-border bg-slate-800/70 p-4 text-center"
-                >
-                  {status === "win" ? (
-                    <div className="text-emerald-300 text-lg font-semibold">
-                      🎉 Você venceu! A palavra era <span className="text-emerald-400">{normalized}</span>.
-                    </div>
-                  ) : (
-                    <div className="text-rose-300 text-lg font-semibold">
-                      💀 Você perdeu! A palavra era <span className="text-rose-400">{normalized}</span>.
-                    </div>
-                  )}
-                  <Button
-                    onClick={resetGame}
-                    className="mt-4 bg-cyan-500 hover:bg-cyan-600"
-                  >
-                    Jogar novamente
-                  </Button>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            <Select onValueChange={(value) => setTema(value)}>
+              <SelectTrigger className="bg-card absolute top-0 left-7">
+                <SelectValue placeholder="Selecione um Tema" />
+              </SelectTrigger>
+
+              <SelectContent>
+                <SelectItem value="todos">Todos</SelectItem>
+                {THEMES.map((x) => (
+                  <SelectItem value={x} key={x}>
+                    {x}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Button
+              onClick={resetGame}
+              className="bg-cyan-500 hover:bg-cyan-600 absolute top-0 right-7"
+            >
+              <RotateCw className="w-4 h-4 mr-2" />
+              Reiniciar
+            </Button>
+
+            <div className="flex items-center flex-row justify-start gap-1 text-blue-700">
+              <Info />
+              <p>Use seu teclado!</p>
+            </div>
           </CardContent>
         </Card>
       </div>
+
+      <Dialog open={status === "win"} onOpenChange={() => {}}>
+        <DialogContent className="bg-card border-border text-center py-8">
+          <DialogHeader>
+            <DialogTitle className="text-3xl font-bold text-emerald-400">
+              🎉 Parabéns!
+            </DialogTitle>
+            <DialogDescription className="text-lg text-muted-foreground">
+              Você adivinhou a palavra corretamente!
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="my-6">
+            <p className="text-2xl font-semibold">
+              A palavra era: <span className="text-emerald-400">{secret}</span>
+            </p>
+          </div>
+
+          <Button
+            onClick={resetGame}
+            className="bg-emerald-500 hover:bg-emerald-600 mt-2"
+          >
+            Jogar Novamente
+          </Button>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={status === "lose"} onOpenChange={() => {}}>
+        <DialogContent className="bg-card border-border text-center py-8">
+          <DialogHeader>
+            <DialogTitle className="text-3xl font-bold text-rose-400">
+              💀 Que pena!
+            </DialogTitle>
+            <DialogDescription className="text-lg text-muted-foreground">
+              Você não conseguiu adivinhar a palavra a tempo...
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="my-6">
+            <p className="text-2xl font-semibold">
+              A palavra era: <span className="text-rose-400">{secret}</span>
+            </p>
+          </div>
+
+          <Button
+            onClick={resetGame}
+            className="bg-rose-500 hover:bg-rose-600 mt-2"
+          >
+            Tentar Novamente
+          </Button>
+        </DialogContent>
+      </Dialog>
     </main>
   );
-}
-
-function pickWord() {
-  return WORDS[Math.floor(Math.random() * WORDS.length)];
 }
 
 /** SVG da forca + animação progressiva das partes do boneco */
